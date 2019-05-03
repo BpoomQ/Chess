@@ -6,7 +6,6 @@
 package game.pieces;
 
 import game.Piece;
-import game.Player;
 import game.PieceType;
 import game.Position;
 
