@@ -45,8 +45,8 @@ public class Game {
 
     private void run() throws IOException {
         initPlayers();
-        System.out.println(showGame());
-        while (true) {
+        while (!board.isGameOver()) {
+            System.out.println("----------------------------------------------------------------------");
             playTurn();
         }
     }
@@ -70,41 +70,49 @@ public class Game {
     }
 
     private void playTurn() throws IOException {
-        Position start, end;
-        System.out.println("Es el turno #" + turn
+        Position start;
+        System.out.println("**Es el turno #" + turn
                 + " juega: " + (turn % 2 != 0
                         ? white + " con las fichas blancas(w)"
-                        : black + " con las fichas negras(b)"));
-        start = startPosition();
-        turn++;
+                        : black + " con las fichas negras(b)") + "**");
+        try {
+            start = startPosition();
+            movePiece(start);
+            turn++;
+        } catch (Exception e) {
+        } finally {
+            System.out.println(showGame());
+        }
     }
 
     public Position startPosition() throws IOException {
         Position start;
         String str[];
         do {
-            System.out.println("Escoge la ficha que desea mover: (ej: a1)");
+            System.out.println(showGame() + "\n"
+                    + "Escoge la ficha que desea mover: (ej: a1)");
             str = br.readLine().split("");
             start = getPosition(str[0].charAt(0), str[1].charAt(0));
         } while (start == null
                 || !board.isTherePiece(
-                        turn % 2 != 0
-                                ? white.getColor()
-                                : black.getColor(),
+                        getPlayerColorByTurn(),
                         start));
         return start;
     }
 
-    public Position endPosition(Position start) throws IOException {
+    public void movePiece(Position start) throws IOException {
         Position end;
+        Piece piece = board.pickPiece(getPlayerColorByTurn(), start);
         String str[];
         do {
-            System.out.println("Escoja a donde movera la ficha: (ej: a1)");
+            System.out.println(showGame() + "\n"
+                    + "Escoja a donde movera la ficha [" + piece + "]: (ej: a1)\n"
+                    + "*Si no desea mover la ficha solo presione enter*");
             str = br.readLine().split("");
             end = getPosition(str[0].charAt(0), str[1].charAt(0));
         } while (end == null
-                || end.equals(start));
-        return end;
+                || end.equals(start)
+                || !board.movePiece(start, end));
     }
 
     public String showGame() {
@@ -120,5 +128,11 @@ public class Game {
             return new Position((int) rowValues.get(row), (int) columnValues.get(column));
         }
         return null;
+    }
+
+    private String getPlayerColorByTurn() {
+        return turn % 2 != 0
+                ? white.getColor()
+                : black.getColor();
     }
 }

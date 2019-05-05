@@ -17,11 +17,17 @@ import java.util.ArrayList;
 public class Board {
 
     private final Spot board[][];
-    private final ArrayList<Piece> pieces;
+    private final ArrayList<Piece> deadWhitePieces;
+    private final ArrayList<Piece> deadBlackPieces;
+    private int whitePieces;
+    private int blackPieces;
 
     public Board() {
         board = new Spot[8][8];
-        pieces = new ArrayList<>();
+        deadWhitePieces = new ArrayList<>(8);
+        deadBlackPieces = new ArrayList<>(8);
+        whitePieces = 0;
+        blackPieces = 0;
         for (Spot[] board1 : board) {
             for (int j = 0; j < board1.length; j++) {
                 board1[j] = new Spot();
@@ -41,8 +47,10 @@ public class Board {
         board[0][2].insertPiece(new Bishop(color));
         board[0][5].insertPiece(new Bishop(color));
         board[0][6].insertPiece(new Knight(color));
+        blackPieces += 4;
         for (int i = 0; i < board.length; i++) {
             board[1][i].insertPiece(new Pawn(color));
+            blackPieces++;
         }
     }
 
@@ -52,8 +60,10 @@ public class Board {
         board[7][2].insertPiece(new Bishop(color));
         board[7][5].insertPiece(new Bishop(color));
         board[7][6].insertPiece(new Knight(color));
+        whitePieces += 4;
         for (int i = 0; i < board.length; i++) {
             board[6][i].insertPiece(new Pawn(color));
+            whitePieces++;
         }
     }
 
@@ -62,13 +72,45 @@ public class Board {
                 && board[position.getI()][position.getJ()].getPiece().color.equals(playerColor);
     }
 
+    public Piece pickPiece(String playerColor, Position position) {
+        return isTherePiece(playerColor, position)
+                ? board[position.getI()][position.getJ()].getPiece()
+                : null;
+    }
+
+    public Piece getPiece(Position position) {
+        return board[position.getI()][position.getJ()].getPiece();
+    }
+
+    public boolean movePiece(Position start, Position end) {
+        Piece piece = board[start.getI()][start.getJ()].getPiece();
+        if (piece.isValidPath(start, end, board)) {
+            if (!board[end.getI()][end.getJ()].isAvailabe()) {
+                Piece temp = board[end.getI()][end.getJ()].getPiece();
+                if (piece.color.equals(temp.color)) {
+                    return false;
+                }
+                if (temp.color.equals("b")) {
+                    deadBlackPieces.add(temp);
+                } else {
+                    deadWhitePieces.add(temp);
+                }
+                board[end.getI()][end.getJ()] = new Spot();
+            }
+            board[start.getI()][start.getJ()] = new Spot();
+            board[end.getI()][end.getJ()].insertPiece(piece);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         char alphabet[] = new char[board.length];
         for (int i = 0; i < alphabet.length; i++) {
             alphabet[i] = (char) ('a' + i);
         }
-        String boardString = "";
+        String boardString = "fichas blancas eliminadas: " + deadWhitePieces + "\n";
         for (int i = 0, k = 8; i < board.length; i++, k--) {
             boardString += k + " ";
             for (Spot item : board[i]) {
@@ -80,6 +122,10 @@ public class Board {
         for (int i = 0; i < board.length; i++) {
             boardString += "   " + alphabet[i];
         }
-        return boardString;
+        return boardString + "\n fichas negras eliminadas: " + deadBlackPieces;
+    }
+
+    boolean isGameOver() {
+        return (deadWhitePieces.size() == whitePieces) || (deadBlackPieces.size() == blackPieces);
     }
 }
