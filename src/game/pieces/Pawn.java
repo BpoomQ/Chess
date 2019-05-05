@@ -8,6 +8,7 @@ package game.pieces;
 import game.Piece;
 import game.PieceType;
 import game.Position;
+import game.Spot;
 
 /**
  *
@@ -21,8 +22,23 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean isValidPath(Position start, Position end) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isValidPath(Position start, Position end, Spot[][] board) {
+        if (color.equals("b")) {
+            return (start.getJ() == end.getJ()
+                    && start.getI() + 1 == end.getI()
+                    && board[end.getI()][start.getJ()].getPiece() == null)
+                    || (start.getI() + 1 == end.getI()
+                    && (start.getJ() + 1 == end.getJ() || start.getJ() - 1 == end.getJ())
+                    && board[end.getI()][end.getJ()].getPiece() != null
+                    && !board[end.getI()][end.getJ()].getPiece().color.equals(this.color));
+        }
+        return (start.getJ() == end.getJ()
+                && start.getI() - 1 == end.getI()
+                && board[end.getI()][end.getJ()].getPiece() == null)
+                || (start.getI() - 1 == end.getI()
+                && (start.getJ() + 1 == end.getJ() || start.getJ() - 1 == end.getJ())
+                && board[end.getI()][end.getJ()].getPiece() != null
+                && !board[end.getI()][end.getJ()].getPiece().color.equals(this.color));
     }
 
     @Override
