@@ -8,10 +8,11 @@ package game.pieces;
 import game.Piece;
 import game.PieceType;
 import game.Position;
+import game.Spot;
 
 /**
  *
- * @author luisa
+ * @author Luis Alejandro Tarazona
  */
 public class Knight extends Piece {
 
@@ -21,8 +22,9 @@ public class Knight extends Piece {
     }
 
     @Override
-    public boolean isValidPath(Position start, Position end) {
-        return ((start.getI() + 2 == end.getI()) && (start.getJ() + 1 == end.getJ() || start.getJ() - 1 == end.getJ()))
+    public boolean isValidPath(Position start, Position end, Spot[][] board) {
+        return (board[end.getI()][end.getJ()].getPiece() != null ? !board[end.getI()][end.getJ()].getPiece().color.equals(this.color) : true)
+                && ((start.getI() + 2 == end.getI()) && (start.getJ() + 1 == end.getJ() || start.getJ() - 1 == end.getJ()))
                 || ((start.getI() - 2 == end.getI()) && (start.getJ() + 1 == end.getJ() || start.getJ() - 1 == end.getJ()))
                 || ((start.getI() + 1 == end.getI() || start.getI() - 1 == end.getI()) && start.getJ() + 2 == end.getJ())
                 || ((start.getI() + 1 == end.getI() || start.getI() - 1 == end.getI()) && start.getJ() - 2 == end.getJ());

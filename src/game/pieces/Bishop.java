@@ -12,7 +12,7 @@ import game.Spot;
 
 /**
  *
- * @author luisa
+ * @author Luis Alejandro Tarazona
  */
 public class Bishop extends Piece {
 
@@ -28,7 +28,6 @@ public class Bishop extends Piece {
                 for (int i = start.getI() + 1, j = start.getJ() + 1;
                         i < end.getI() && j < end.getJ();
                         i++, j++) {
-                    System.out.println("i: " + i + " j: " + j);
 
                     if (board[i][j].getPiece() != null) {
                         return false;
@@ -38,7 +37,6 @@ public class Bishop extends Piece {
                 for (int i = start.getI() + 1, j = start.getJ() - 1;
                         i < end.getI() && j > end.getJ();
                         i++, j--) {
-                    System.out.println("i: " + i + " j: " + j);
                     if (board[i][j].getPiece() != null) {
                         return false;
                     }
@@ -47,7 +45,6 @@ public class Bishop extends Piece {
                 for (int i = start.getI() - 1, j = start.getJ() + 1;
                         i > end.getI() && j <end.getJ();
                         i--, j++) {
-                    System.out.println("i: " + i + " j: " + j);
                     if (board[i][j].getPiece() != null) {
                         return false;
                     }
@@ -61,9 +58,6 @@ public class Bishop extends Piece {
                     }
                 }
             }
-            System.out.println(board[end.getI()][end.getJ()].getPiece() != null
-                    ? !board[end.getI()][end.getJ()].getPiece().color.equals(this.color)
-                    : "BLANK");
             return board[end.getI()][end.getJ()].getPiece() != null
                     ? !board[end.getI()][end.getJ()].getPiece().color.equals(this.color)
                     : true;

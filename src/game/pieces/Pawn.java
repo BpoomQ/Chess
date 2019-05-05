@@ -12,7 +12,7 @@ import game.Spot;
 
 /**
  *
- * @author luisa
+ * @author Luis Alejandro Tarazona
  */
 public class Pawn extends Piece {
 

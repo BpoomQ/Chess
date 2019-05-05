@@ -7,7 +7,7 @@ package game;
 
 /**
  *
- * @author luisa
+ * @author Luis Alejandro Tarazona
  */
 public abstract class Piece {
 
@@ -18,7 +18,12 @@ public abstract class Piece {
         this.color = Color;
     }
 
-    public abstract boolean isValidPath(Position start, Position end);
+    public abstract boolean isValidPath(Position start, Position end, Spot[][] board);
+
+    @Override
+    public String toString() {
+        return type + color;
+    }
 
     public abstract PieceType getType();
 }
