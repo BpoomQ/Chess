@@ -7,12 +7,12 @@ package game;
 
 /**
  *
- * @author luisa
+ * @author Luis Alejandro Tarazona
  */
 public class Position {
 
-    private int i;
-    private int j;
+    private final int i;
+    private final int j;
 
     public Position(int i, int j) {
         this.i = i;

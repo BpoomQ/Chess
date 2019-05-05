@@ -9,7 +9,7 @@ package game;
  *
  * @author Luis Alejandro Tarazona
  */
-class Spot {
+public class Spot {
 
     private Piece piece;
 
